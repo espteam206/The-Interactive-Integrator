@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sunburst Example - Flask Website</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+      <a href="/sunburst_example">Sunburst Example</a>
+    </nav>
+    <main>
+      <h1>Sunburst Diagram Example</h1>
+      <p>This page demonstrates how the concrete composition is rendered as a Plotly Sunburst chart.</p>
+      <section class="result">
+        <h2>Example Composition</h2>
+        <p>Cement: 80 kg, Sand: 100 kg, Aggregate: 90 kg, Water: 8 L, Admixture: 2 mL</p>
+      </section>
+      <section class="result">
+        {% if sunburst_div %}
+        <div>{{ sunburst_div|safe }}</div>
+        {% else %}
+        <p class="error">Unable to generate sunburst at this time.</p>
+        {% endif %}
+      </section>
+    </main>
+  </body>
+</html>

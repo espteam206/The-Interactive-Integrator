@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flask Website</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <nav>
+      <a href="/">Concrete Calculator</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+      <a href="/sunburst_example">Sunburst Example</a>
+      <a href="/help">Help</a>
+    </nav>
+    <main>
+      <h1>Concrete Calculator</h1>
+      <p>Enter 8 values for concrete volume and mix details.</p>
+
+      <form method="post" action="/">
+        <h2>Cementitious Composition</h2>
+      <div class="table-controls">
+        <button type="button" onclick="addRow('scm')">+ Add SCM row</button>
+        <button type="button" onclick="removeRow('scm')">- Remove SCM row</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>EPD from the EC3 database</th>
+            <th>Route (Old/New Address)</th>
+            <th>Transportation Method</th>
+          </tr>
+        </thead>
+        <tbody id="scm_rows">
+          <tr data-index="1">
+            <td>SCM1</td>
+            <td><input type="text" name="scm_type_1" placeholder="Type"></td>
+            <td>
+              <input type="text" name="scm_old_1" placeholder="Old Address"><br>
+              <input type="text" name="scm_new_1" placeholder="New Address">
+            </td>
+            <td><input type="text" name="scm_transport_1" placeholder="Transportation Method"></td>
+          </tr>
+        </tbody>
+      </table>
+      <input type="hidden" name="scm_row_count" id="scm_row_count" value="1" />
+        <h2>Aggregates</h2>
+      <div class="table-controls">
+        <button type="button" onclick="addRow('agg')">+ Add Aggregate row</button>
+        <button type="button" onclick="removeRow('agg')">- Remove Aggregate row</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>EPD from the EC3 database</th>
+            <th>Route (Old/New Address)</th>
+            <th>Transportation Method</th>
+          </tr>
+        </thead>
+        <tbody id="agg_rows">
+          <tr data-index="1">
+            <td>Aggregate1</td>
+            <td><input type="text" name="agg_type_1" placeholder="Type"></td>
+            <td>
+              <input type="text" name="agg_old_1" placeholder="Old Address"><br>
+              <input type="text" name="agg_new_1" placeholder="New Address">
+            </td>
+            <td><input type="text" name="agg_transport_1" placeholder="Transportation Method"></td>
+          </tr>
+        </tbody>
+      </table>
+      <input type="hidden" name="agg_row_count" id="agg_row_count" value="1" />
+        <h2>Admixtures</h2>
+      <div class="table-controls">
+        <button type="button" onclick="addRow('adm')">+ Add Admixture row</button>
+        <button type="button" onclick="removeRow('adm')">- Remove Admixture row</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>EPD from the EC3 database</th>
+            <th>Route (Old/New Address)</th>
+            <th>Transportation Method</th>
+          </tr>
+        </thead>
+        <tbody id="adm_rows">
+          <tr data-index="1">
+            <td>Admixture1</td>
+            <td><input type="text" name="adm_type_1" placeholder="Type"></td>
+            <td>
+              <input type="text" name="adm_old_1" placeholder="Old Address"><br>
+              <input type="text" name="adm_new_1" placeholder="New Address">
+            </td>
+            <td><input type="text" name="adm_transport_1" placeholder="Transportation Method"></td>
+          </tr>
+        </tbody>
+      </table>
+      <input type="hidden" name="adm_row_count" id="adm_row_count" value="1" />
+        <button type="submit">Calculate</button>
+      </form>
+
+      {% if result %}
+      <section class="result">
+        <h2>Concrete Metrics</h2>
+        {% if result.error %}
+          <p class="error">{{ result.error }}</p>
+          <script>alert("{{ result.error }}");</script>
+        {% else %}
+          <ul>
+            <li>Volume (m³): {{ result.volume_m3 }}</li>
+            <li>Cement (kg): {{ result.cement_kg }}</li>
+            <li>Sand (kg): {{ result.sand_kg }}</li>
+            <li>Aggregate (kg): {{ result.aggregate_kg }}</li>
+            <li>Water (L): {{ result.water_l }}</li>
+            <li>Admixture (mL): {{ result.admixture_ml }}</li>
+            <li>Mix total (kg): {{ result.mix_total_kg }}</li>
+            <li>Water/Cement ratio: {{ result.water_cement_ratio }}</li>
+          </ul>
+        {% endif %}
+      </section>
+      {% endif %}
+
+      {% if route_results %}
+      <section class="result">
+        <h2>Row Route Distances</h2>
+        <ul>
+          {% for r in route_results %}
+            <li>
+              {{ r.category }} {{ r.label }}:
+              {{ r.origin }} → {{ r.destination }}
+              {% if r.distance.error %}
+                (Error: {{ r.distance.error }})
+              {% else %}
+                ({{ r.distance.distance_text }}, {{ r.distance.duration_text }})
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+
+      {% if ec3_results %}
+      <section class="result">
+        <h2>EC3 API Lookup Results</h2>
+        <ul>
+          {% for item in ec3_results %}
+            <li>
+              {{ item.category }} {{ item.label }} ({{ item.product }}):
+              {% if item.epd.error %}
+                Error: {{ item.epd.error }}
+              {% else %}
+                ID: {{ item.epd.id or 'n/a' }}, Name: {{ item.epd.name or 'n/a' }}
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+
+      {% if sunburst_div %}
+      <section class="result">
+        <h2>Sunburst Diagram of Concrete Composition</h2>
+        <div>{{ sunburst_div|safe }}</div>
+      </section>
+      {% endif %}
+
+      <section class="distance">
+        <h2>Concrete Transport Distance</h2>
+        <p>Calculate route distance/duration via Google Maps API.</p>
+      <script>
+        const rowLabels = {scm: 'SCM', agg: 'Aggregate', adm: 'Admixture'};
+
+        function addRow(prefix) {
+          const container = document.getElementById(prefix + '_rows');
+          const countInput = document.getElementById(prefix + '_row_count');
+          let count = Number(countInput.value) || 1;
+          count += 1;
+          const row = document.createElement('tr');
+          row.dataset.index = count;
+          row.innerHTML = `
+            <td>${rowLabels[prefix]}${count}</td>
+            <td><input type="text" name="${prefix}_type_${count}" placeholder="Type"></td>
+            <td>
+              <input type="text" name="${prefix}_old_${count}" placeholder="Old Address"><br>
+              <input type="text" name="${prefix}_new_${count}" placeholder="New Address">
+            </td>
+            <td><input type="text" name="${prefix}_transport_${count}" placeholder="Transportation Method"></td>
+          `;
+          container.appendChild(row);
+          countInput.value = count;
+        }
+
+        function removeRow(prefix) {
+          const container = document.getElementById(prefix + '_rows');
+          const countInput = document.getElementById(prefix + '_row_count');
+          let count = Number(countInput.value) || 1;
+          if (count <= 1) {
+            return;
+          }
+          const lastRow = container.querySelector('tr[data-index="' + count + '"]');
+          if (lastRow) {
+            container.removeChild(lastRow);
+            count -= 1;
+            countInput.value = count;
+          }
+        }
+      </script>
+
+        <form method="post" action="/">
+          <input type="hidden" name="action" value="distance" />
+          <label>Origin<br><input type="text" name="origin" value="{{ origin or '' }}" required placeholder="123 Main St, City, Country"></label><br>
+          <label>Destination<br><input type="text" name="destination" value="{{ destination or '' }}" required placeholder="456 Site Rd, City, Country"></label><br>
+          <label>Mode<br>
+            <select name="mode">
+              <option value="driving" {% if mode == 'driving' %}selected{% endif %}>Driving</option>
+              <option value="truck" {% if mode == 'truck' %}selected{% endif %}>Truck</option>
+              <option value="walking" {% if mode == 'walking' %}selected{% endif %}>Walking</option>
+              <option value="bicycling" {% if mode == 'bicycling' %}selected{% endif %}>Bicycling</option>
+              <option value="transit" {% if mode == 'transit' %}selected{% endif %}>Transit</option>
+            </select>
+          </label><br>
+          <button type="submit">Get distance</button>
+        </form>
+
+        {% if distance_result %}
+        <div class="result">
+          {% if distance_result.error %}
+            <p class="error">{{ distance_result.error }}</p>
+          {% else %}
+            <ul>
+              <li>Origin: {{ distance_result.origin }}</li>
+              <li>Destination: {{ distance_result.destination }}</li>
+              <li>Mode: {{ distance_result.mode }}</li>
+              <li>Distance: {{ distance_result.distance_text }} ({{ distance_result.distance_meters }} m)</li>
+              <li>Duration: {{ distance_result.duration_text }} ({{ distance_result.duration_seconds }} sec)</li>
+            </ul>
+          {% endif %}
+        </div>
+        {% endif %}
+      </section>
+    </main>
+  </body>
+</html>
