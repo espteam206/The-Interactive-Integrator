@@ -15,4 +15,6 @@ table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
 th, td { border: 1px solid #ccc; padding: 10px; vertical-align: top; text-align: left; }
 th, td { width: 25%; }
 th { background: #eaf2f7; }
+.help-widget { margin-left: 6px; cursor: help; font-size: 0.9em; color: #005a9c; border: 1px solid #005a9c; border-radius: 50%; width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; background: #dbeaf7; }
+.help-widget:hover { background: #c7ddf0; }
 table input[type="text"] { width: 100%; box-sizing: border-box; margin-bottom: 8px; }
