@@ -42,4 +42,8 @@ Each row is labeled SCM[1-4], Aggregate[1-4], and Admixture[1-4] respectively fo
 
 "can you make the spacing of the 1st table the same as the second and third tables"
 
-TOTAL: 17 PROMPTS
+"can you add a column in each table that is "percent amount" with all the percents from each row from every table combined must add up to 100%"
+
+"can you make the sunburst diagram have multiple levels"
+
+TOTAL: 19 PROMPTS
