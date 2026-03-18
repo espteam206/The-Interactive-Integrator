@@ -1,0 +1,45 @@
+The following are all the prompts given to Github Copilot to create the website for "The Interactive Integrator".
+The prompts were strategically chosen based on team discussions and research.
+
+######################################################################################################################
+16 March:
+"using flask to create a website"
+
+"can you add an input textbox and an output via a sunburst diagram from plotly"
+
+"can you add 8 input text boxes on the page "Concrete Calculator""
+
+"can you build a way to call the google maps API as a way to determine distance for concrete transport?"
+
+"can you put the google maps api on the same page as the concrete calculator tab on the website"
+
+"remove the 'distance' page and merge it all into the 'concrete calculator' page"
+
+17 March:
+"can you get rid of the 8 textboxes on the main page and replace it with 3 tables labeled: 
+Cementicious Composition, Aggregates, and Admixtures respectively. Each table has 4 columns and 4 rows of inputtable text boxes. 
+Each column is named: Type, [placeholder], Distance, and Transportation Method. 
+Each row is labeled SCM[1-4], Aggregate[1-4], and Admixture[1-4] respectively for each table."
+
+"can you replace the distance column in the table with the google map api integration with old address and new address?"
+
+"the input boxes in the table are overlapping can you move them a bit?"
+
+18 March:
+"replace the [placeholder] columns in the 3 tables to be "EPD from the EC3 database""
+
+"can you remove the Sunburst page and instead add it to the main Concrete Calculator page where the calculated values will be outputted onto the Sunburst Diagram"
+
+"add a new page called Sunburst_Example that gives a visual demonstration of the sunburst diagram on the website"
+
+"for the textboxes in the table, can you make it so that if the user hits the calculate button and there are missing values an error message will pop up"
+
+"can you make it so that there's one row per table for SCM, Aggregate, and Admixtures but add the ability to add/subtract more rows to each table for each mixture the user wants to calculate"
+
+"Add a Help page with placeholders for instructions for the calculator"
+
+"For the values in column 1 of all the tables can you add the ability to call the "buildingtransparency.org" EC3 database API."
+
+"can you make the spacing of the 1st table the same as the second and third tables"
+
+TOTAL: 17 PROMPTS
