@@ -46,4 +46,7 @@ Each row is labeled SCM[1-4], Aggregate[1-4], and Admixture[1-4] respectively fo
 
 "can you make the sunburst diagram have multiple levels"
 
-TOTAL: 19 PROMPTS
+"in the first column first row of each table can you add a help widget that when you hover over it with a cursor, text pops up giving instructions."
+
+"can you add a similar widget for every colum header containing instructions"
+TOTAL: 21 PROMPTS
