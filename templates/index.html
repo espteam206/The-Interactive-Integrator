@@ -31,6 +31,8 @@
             <th>EPD from the EC3 database</th>
             <th>Route (Old/New Address)</th>
             <th>Transportation Method</th>
+            <th>Amount</th>
+            <th>Percent Amount</th>
           </tr>
         </thead>
         <tbody id="scm_rows">
@@ -42,6 +44,8 @@
               <input type="text" name="scm_new_1" placeholder="New Address">
             </td>
             <td><input type="text" name="scm_transport_1" placeholder="Transportation Method"></td>
+            <td><input type="number" name="scm_amount_1" step="0.01" min="0" placeholder="Amount"></td>
+            <td>{% if percent_by_row and percent_by_row.get('scm_1') is not none %}{{ percent_by_row.get('scm_1') }}%{% else %}-{% endif %}</td>
           </tr>
         </tbody>
       </table>
@@ -58,6 +62,8 @@
             <th>EPD from the EC3 database</th>
             <th>Route (Old/New Address)</th>
             <th>Transportation Method</th>
+            <th>Amount</th>
+            <th>Percent Amount</th>
           </tr>
         </thead>
         <tbody id="agg_rows">
@@ -69,6 +75,8 @@
               <input type="text" name="agg_new_1" placeholder="New Address">
             </td>
             <td><input type="text" name="agg_transport_1" placeholder="Transportation Method"></td>
+            <td><input type="number" name="agg_amount_1" step="0.01" min="0" placeholder="Amount"></td>
+            <td>{% if percent_by_row and percent_by_row.get('agg_1') is not none %}{{ percent_by_row.get('agg_1') }}%{% else %}-{% endif %}</td>
           </tr>
         </tbody>
       </table>
@@ -85,6 +93,8 @@
             <th>EPD from the EC3 database</th>
             <th>Route (Old/New Address)</th>
             <th>Transportation Method</th>
+            <th>Amount</th>
+            <th>Percent Amount</th>
           </tr>
         </thead>
         <tbody id="adm_rows">
@@ -96,6 +106,8 @@
               <input type="text" name="adm_new_1" placeholder="New Address">
             </td>
             <td><input type="text" name="adm_transport_1" placeholder="Transportation Method"></td>
+            <td><input type="number" name="adm_amount_1" step="0.01" min="0" placeholder="Amount"></td>
+            <td>{% if percent_by_row and percent_by_row.get('adm_1') is not none %}{{ percent_by_row.get('adm_1') }}%{% else %}-{% endif %}</td>
           </tr>
         </tbody>
       </table>
@@ -189,6 +201,8 @@
               <input type="text" name="${prefix}_new_${count}" placeholder="New Address">
             </td>
             <td><input type="text" name="${prefix}_transport_${count}" placeholder="Transportation Method"></td>
+            <td><input type="number" name="${prefix}_amount_${count}" step="0.01" min="0" placeholder="Amount"></td>
+            <td>-</td>
           `;
           container.appendChild(row);
           countInput.value = count;
