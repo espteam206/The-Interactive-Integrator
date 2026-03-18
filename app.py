@@ -87,21 +87,53 @@ def fetch_ec3_epd(product_name):
 
 
 def create_sunburst_figure(result):
-    labels = ['Concrete', 'Cement', 'Sand', 'Aggregate', 'Water', 'Admixture']
-    parents = ['', 'Concrete', 'Concrete', 'Concrete', 'Concrete', 'Concrete']
-    values = [
-        result.get('mix_total_kg', 0) or 0,
-        result.get('cement_kg', 0) or 0,
-        result.get('sand_kg', 0) or 0,
-        result.get('aggregate_kg', 0) or 0,
-        result.get('water_l', 0) or 0,
-        result.get('admixture_ml', 0) or 0,
+    cement = float(result.get('cement_kg', 0) or 0)
+    sand = float(result.get('sand_kg', 0) or 0)
+    aggregate = float(result.get('aggregate_kg', 0) or 0)
+    water = float(result.get('water_l', 0) or 0)
+    admixture = float(result.get('admixture_ml', 0) or 0)
+    mix_total = float(result.get('mix_total_kg', 0) or 0)
+
+    cement_1 = round(cement * 0.7, 2)
+    cement_2 = round(cement - cement_1, 2)
+    sand_1 = round(sand * 0.6, 2)
+    sand_2 = round(sand - sand_1, 2)
+    agg_1 = round(aggregate * 0.55, 2)
+    agg_2 = round(aggregate - agg_1, 2)
+
+    labels = [
+        'Concrete',
+        'Cement', 'Sand', 'Aggregate', 'Water', 'Admixture',
+        'Portland Cement', 'Fly Ash',
+        'Fine Sand', 'Coarse Sand',
+        'Gravel', 'Crushed Stone',
+        'Plasticizer'
     ]
+
+    parents = [
+        '',
+        'Concrete', 'Concrete', 'Concrete', 'Concrete', 'Concrete',
+        'Cement', 'Cement',
+        'Sand', 'Sand',
+        'Aggregate', 'Aggregate',
+        'Admixture'
+    ]
+
+    values = [
+        mix_total,
+        cement, sand, aggregate, water, admixture,
+        cement_1, cement_2,
+        sand_1, sand_2,
+        agg_1, agg_2,
+        admixture
+    ]
+
     fig = go.Figure(go.Sunburst(
         labels=labels,
         parents=parents,
         values=values,
-        branchvalues='total'
+        branchvalues='total',
+        maxdepth=3
     ))
     fig.update_layout(margin=dict(t=40, l=0, r=0, b=0))
     return plot(fig, output_type='div', include_plotlyjs='cdn')
@@ -127,6 +159,7 @@ def home():
     distance_result = None
     route_results = []
     ec3_results = []
+    percent_by_row = {}
     sunburst_div = None
 
     if request.method == 'POST':
@@ -159,7 +192,10 @@ def home():
                     old = request.form.get(f'{field_prefix}_old_{i}', '').strip()
                     new = request.form.get(f'{field_prefix}_new_{i}', '').strip()
                     trans = request.form.get(f'{field_prefix}_transport_{i}', '').strip()
-                    if any([t, old, new, trans]) and not all([t, old, new, trans]):
+                    amt = request.form.get(f'{field_prefix}_amount_{i}', '').strip()
+                    any_field = any([t, old, new, trans, amt])
+                    all_fields = all([t, old, new, trans, amt])
+                    if any_field and not all_fields:
                         table_missing = True
                         break
                 if table_missing:
@@ -170,13 +206,30 @@ def home():
             else:
                 ec3_results = []
 
-                # calculate EC3 metadata for each Type value in all rows
+                # collect amount data for percent calculations
+                row_amounts = []
                 categories = [
                     ('SCM', 'scm'),
                     ('Aggregate', 'agg'),
                     ('Admixture', 'adm')
                 ]
+                for label_prefix, field_prefix in categories:
+                    row_count = int(request.form.get(f'{field_prefix}_row_count', '1') or '1')
+                    for i in range(1, row_count + 1):
+                        amount_str = request.form.get(f'{field_prefix}_amount_{i}', '').strip()
+                        try:
+                            amount_val = float(amount_str) if amount_str else 0.0
+                        except ValueError:
+                            amount_val = 0.0
+                        row_amounts.append((field_prefix, i, amount_val))
 
+                total_amount = sum([amt for _, _, amt in row_amounts])
+                percent_by_row = {}
+                for field_prefix, i, amt in row_amounts:
+                    key = f'{field_prefix}_{i}'
+                    percent_by_row[key] = round((amt / total_amount * 100) if total_amount > 0 else 0.0, 2)
+
+                # calculate EC3 metadata for each Type value in all rows
                 for label_prefix, field_prefix in categories:
                     row_count = int(request.form.get(f'{field_prefix}_row_count', '1') or '1')
                     for i in range(1, row_count + 1):
@@ -188,6 +241,7 @@ def home():
                                 'label': f'{label_prefix}{i}',
                                 'product': product_name,
                                 'epd': ec3_data,
+                                'percent': percent_by_row.get(f'{field_prefix}_{i}', 0.0)
                             })
 
                 # calculate distances for each table row route
@@ -237,7 +291,7 @@ def home():
             if result and not result.get('error'):
                 sunburst_div = create_sunburst_figure(result)
 
-    return render_template('index.html', result=result, form_data=form_data, origin=origin, destination=destination, mode=mode, distance_result=distance_result, route_results=route_results, ec3_results=ec3_results, sunburst_div=sunburst_div)
+    return render_template('index.html', result=result, form_data=form_data, origin=origin, destination=destination, mode=mode, distance_result=distance_result, route_results=route_results, ec3_results=ec3_results, percent_by_row=percent_by_row, sunburst_div=sunburst_div)
 
 @app.route('/about')
 def about():
