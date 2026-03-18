@@ -16,8 +16,6 @@
     </nav>
     <main>
       <h1>Concrete Calculator</h1>
-      <p>Enter 8 values for concrete volume and mix details.</p>
-
       <form method="post" action="/">
         <h2>Cementitious Composition</h2>
       <div class="table-controls">
@@ -27,17 +25,17 @@
       <table>
         <thead>
           <tr>
-            <th>Type</th>
-            <th>EPD from the EC3 database</th>
-            <th>Route (Old/New Address)</th>
-            <th>Transportation Method</th>
-            <th>Amount</th>
-            <th>Percent Amount</th>
+            <th>Type <span class="help-widget" title="Material type, e.g., SCM, aggregate, admixture.">🛈</span></th>
+            <th>EPD from the EC3 database <span class="help-widget" title="Environmental Product Database entry for this material.">🛈</span></th>
+            <th>Route (Old/New Address) <span class="help-widget" title="Enter origin/destination addresses for transport distance.">🛈</span></th>
+            <th>Transportation Method <span class="help-widget" title="How this material is transported, e.g., truck or rail.">🛈</span></th>
+            <th>Amount <span class="help-widget" title="Amount in kg or mL depending on material type.">🛈</span></th>
+            <th>Percent Amount <span class="help-widget" title="Material percentage of the total mix.">🛈</span></th>
           </tr>
         </thead>
         <tbody id="scm_rows">
           <tr data-index="1">
-            <td>SCM1</td>
+            <td>SCM1 <span class="help-widget" title="Enter the SCM name for this row. Example: portland cement substitute, Clinoptilolite Zeolite.">🛈</span></td>
             <td><input type="text" name="scm_type_1" placeholder="Type"></td>
             <td>
               <input type="text" name="scm_old_1" placeholder="Old Address"><br>
@@ -58,17 +56,17 @@
       <table>
         <thead>
           <tr>
-            <th>Type</th>
-            <th>EPD from the EC3 database</th>
-            <th>Route (Old/New Address)</th>
-            <th>Transportation Method</th>
-            <th>Amount</th>
-            <th>Percent Amount</th>
+            <th>Type <span class="help-widget" title="Material type, e.g., SCM, aggregate, admixture.">🛈</span></th>
+            <th>EPD from the EC3 database <span class="help-widget" title="Environmental Product Database entry for this material.">🛈</span></th>
+            <th>Route (Old/New Address) <span class="help-widget" title="Enter origin/destination addresses for transport distance.">🛈</span></th>
+            <th>Transportation Method <span class="help-widget" title="How this material is transported, e.g., truck or rail.">🛈</span></th>
+            <th>Amount <span class="help-widget" title="Amount in kg or mL depending on material type.">🛈</span></th>
+            <th>Percent Amount <span class="help-widget" title="Material percentage of the total mix.">🛈</span></th>
           </tr>
         </thead>
         <tbody id="agg_rows">
           <tr data-index="1">
-            <td>Aggregate1</td>
+            <td>Aggregate1 <span class="help-widget" title="Enter the aggregate type for this row. Example: gravel, crushed stone, sand.">🛈</span></td>
             <td><input type="text" name="agg_type_1" placeholder="Type"></td>
             <td>
               <input type="text" name="agg_old_1" placeholder="Old Address"><br>
@@ -89,17 +87,17 @@
       <table>
         <thead>
           <tr>
-            <th>Type</th>
-            <th>EPD from the EC3 database</th>
-            <th>Route (Old/New Address)</th>
-            <th>Transportation Method</th>
-            <th>Amount</th>
-            <th>Percent Amount</th>
+            <th>Type <span class="help-widget" title="Material type, e.g., SCM, aggregate, admixture.">🛈</span></th>
+            <th>EPD from the EC3 database <span class="help-widget" title="Environmental Product Database entry for this material.">🛈</span></th>
+            <th>Route (Old/New Address) <span class="help-widget" title="Enter origin/destination addresses for transport distance.">🛈</span></th>
+            <th>Transportation Method <span class="help-widget" title="How this material is transported, e.g., truck or rail.">🛈</span></th>
+            <th>Amount <span class="help-widget" title="Amount in kg or mL depending on material type.">🛈</span></th>
+            <th>Percent Amount <span class="help-widget" title="Material percentage of the total mix.">🛈</span></th>
           </tr>
         </thead>
         <tbody id="adm_rows">
           <tr data-index="1">
-            <td>Admixture1</td>
+            <td>Admixture1 <span class="help-widget" title="Enter the admixture name for this row. Example: plasticizer, retarder, accelerator.">🛈</span></td>
             <td><input type="text" name="adm_type_1" placeholder="Type"></td>
             <td>
               <input type="text" name="adm_old_1" placeholder="Old Address"><br>
