@@ -3,8 +3,10 @@ A website written using Python and Flask that calculates concrete carbon footpri
 
 API Calls:
 https://mapsplatform.google.com/lp/maps-apis/
+
 https://www.buildingtransparency.org/tools/
 
 Python Framework:
 https://flask.palletsprojects.com/en/stable/
+
 https://plotly.com/python/sunburst-charts/
